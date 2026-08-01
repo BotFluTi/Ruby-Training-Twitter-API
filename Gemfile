@@ -38,3 +38,7 @@ group :development, :test do
   gem "rubocop-rails", require: false
   gem "rubocop-rspec", require: false
 end
+
+gem "nokogiri", "~> 1.19"
+
+gem "webmock", "~> 3.26", group: :test
