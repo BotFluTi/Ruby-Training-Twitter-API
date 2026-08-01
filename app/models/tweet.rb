@@ -2,6 +2,7 @@
 
 class Tweet < ApplicationRecord
   before_validation :generate_uuid, on: :create
+  has_many :resources, dependent: :destroy
 
   validates :uuid, presence: true, uniqueness: true
   validates :content, presence: true
