@@ -58,4 +58,28 @@ RSpec.describe "tweetCreate mutation", type: :request do
     expect { perform_request }
       .to have_enqueued_job(OpenGraphScraperJob)
   end
+
+  context "when content is empty" do
+    let(:content) { "" }
+
+    it "does not create a tweet" do
+      expect { perform_request }
+        .not_to change(Tweet, :count)
+    end
+
+    it "does not add the scraper job" do
+      expect { perform_request }
+        .not_to have_enqueued_job(OpenGraphScraperJob)
+    end
+
+    it "returns the validation error" do
+      perform_request
+
+      result = JSON.parse(response.body)
+      payload = result.dig("data", "tweetCreate")
+
+      expect(payload["tweet"]).to be_nil
+      expect(payload["errors"]).to include("Content can't be blank")
+    end
+  end
 end
