@@ -8,11 +8,11 @@ module Mutations
     field :errors, [ String, null: false ], null: false
 
     def resolve(content:)
-      tweet = Tweet.new(
-        content: content
-      )
+      tweet = Tweet.new(content: content)
 
       if tweet.save
+        OpenGraphScraperJob.perform_later(tweet_id: tweet.id)
+
         {
           tweet: tweet,
           errors: []

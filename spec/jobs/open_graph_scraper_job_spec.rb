@@ -10,7 +10,7 @@ RSpec.describe OpenGraphScraperJob, type: :job do
   end
 
   let(:tweet) { tweets(:with_url) }
-  let(:urls) { ["https://12ft.io/"] }
+  let(:urls) { [ "https://12ft.io/" ] }
 
   let(:metadata) do
     {

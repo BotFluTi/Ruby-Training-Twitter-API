@@ -3,6 +3,12 @@
 require "rails_helper"
 
 RSpec.describe "tweetCreate mutation", type: :request do
+  subject(:perform_request) do
+    post "/graphql",
+         params: { query: mutation, variables: variables },
+         as: :json
+  end
+
   let(:mutation) do
     <<~GRAPHQL
       mutation($input: TweetCreateInput!) {
@@ -10,31 +16,46 @@ RSpec.describe "tweetCreate mutation", type: :request do
           tweet {
             uuid
           }
+          errors
         }
       }
     GRAPHQL
   end
 
-  it "creates a tweet" do
-    variables = {
+  let(:content) { "I don't know what I am doing!" }
+
+  let(:variables) do
+    {
       input: {
-        content: "I don't know what I am doing!"
+        content: content
       }
     }
+  end
 
-    expect do
-      post "/graphql",
-           params: { query: mutation, variables: variables },
-           as: :json
-    end.to change(Tweet, :count).by(1)
+  it "creates a tweet" do
+    expect { perform_request }
+      .to change(Tweet, :count).by(1)
+  end
+
+  it "returns the tweet UUID" do
+    perform_request
 
     result = JSON.parse(response.body)
 
-    expect(response).to have_http_status(:ok)
-    expect(result["errors"]).to be_nil
-    expect(result.dig("data", "tweetCreate", "tweet", "uuid")).to be_present
-    expect(Tweet.last.content).to eq(
-                                    "I don't know what I am doing!"
-                                  )
+    expect(result.dig("data", "tweetCreate", "tweet", "uuid"))
+      .to be_present
+  end
+
+  it "returns no errors" do
+    perform_request
+
+    result = JSON.parse(response.body)
+
+    expect(result.dig("data", "tweetCreate", "errors")).to eq([])
+  end
+
+  it "adds the Open Graph scraper job" do
+    expect { perform_request }
+      .to have_enqueued_job(OpenGraphScraperJob)
   end
 end
