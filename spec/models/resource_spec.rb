@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Resource, type: :model do
   subject(:resource) do
     described_class.new(
-      tweet: tweet,
+      resourceable: resourceable,
       title: "I don't know what I am doing!",
       description: "An Open Graph description",
       url: url,
@@ -14,7 +14,7 @@ RSpec.describe Resource, type: :model do
     )
   end
 
-  let(:tweet) do
+  let(:resourceable) do
     Tweet.create!(content: "I don't know what I am doing!")
   end
 
@@ -24,8 +24,8 @@ RSpec.describe Resource, type: :model do
     expect(resource).to be_valid
   end
 
-  context "without a tweet" do
-    let(:tweet) { nil }
+  context "without a resourceable" do
+    let(:resourceable) { nil }
 
     it "is invalid" do
       expect(resource).not_to be_valid

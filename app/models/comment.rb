@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-class Tweet < ApplicationRecord
+class Comment < ApplicationRecord
   include HasUuid
 
-  has_many :comments, -> { order(:id) }, dependent: :destroy
+  belongs_to :tweet
+
   has_many :resources, as: :resourceable, dependent: :destroy
 
   validates :content, presence: true

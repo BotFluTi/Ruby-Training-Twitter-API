@@ -10,17 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_01_103541) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_15_234441) do
+  create_table "comments", force: :cascade do |t|
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.integer "tweet_id", null: false
+    t.datetime "updated_at", null: false
+    t.string "uuid", null: false
+    t.index ["tweet_id"], name: "index_comments_on_tweet_id"
+    t.index ["uuid"], name: "index_comments_on_uuid", unique: true
+  end
+
   create_table "resources", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description", null: false
     t.integer "image_byte_size", null: false
     t.string "image_url", null: false
+    t.integer "resourceable_id", null: false
+    t.string "resourceable_type", null: false
     t.string "title", null: false
-    t.integer "tweet_id", null: false
     t.datetime "updated_at", null: false
     t.string "url", null: false
-    t.index ["tweet_id"], name: "index_resources_on_tweet_id"
+    t.index ["resourceable_type", "resourceable_id"], name: "index_resources_on_resourceable"
   end
 
   create_table "tweets", force: :cascade do |t|
@@ -31,5 +42,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_103541) do
     t.index ["uuid"], name: "index_tweets_on_uuid", unique: true
   end
 
-  add_foreign_key "resources", "tweets"
+  add_foreign_key "comments", "tweets"
 end

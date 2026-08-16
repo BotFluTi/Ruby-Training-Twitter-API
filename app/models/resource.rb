@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Resource < ApplicationRecord
-  belongs_to :tweet
+  belongs_to :resourceable, polymorphic: true
 
   validates :title, presence: true
   validates :description, presence: true

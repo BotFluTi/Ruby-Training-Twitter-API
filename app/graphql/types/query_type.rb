@@ -7,7 +7,7 @@ module Types
           null: false
 
     def tweets
-      Tweet.includes(:resources).order(:id)
+      Tweet.includes(:resources, comments: :resources).order(:id)
     end
   end
 end
