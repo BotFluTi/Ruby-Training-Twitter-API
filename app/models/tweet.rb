@@ -3,6 +3,7 @@
 class Tweet < ApplicationRecord
   include HasUuid
 
+  has_many :comments, dependent: :destroy
   has_many :resources, as: :resourceable, dependent: :destroy
 
   validates :content, presence: true
