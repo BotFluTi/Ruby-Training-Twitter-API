@@ -6,7 +6,7 @@ RSpec.describe OpenGraphScraperJob, type: :job do
   fixtures :tweets
 
   subject(:perform_job) do
-    described_class.perform_now(tweet_id: tweet.id)
+    described_class.perform_now(record: tweet)
   end
 
   let(:tweet) { tweets(:with_url) }
@@ -51,6 +51,27 @@ RSpec.describe OpenGraphScraperJob, type: :job do
     it "does not create resources" do
       expect { perform_job }
         .not_to change(Resource, :count)
+    end
+  end
+
+  context "when the record is a comment" do
+    let(:comment) do
+      Comment.create!(
+        tweet: tweet,
+        content: "Nice link! https://12ft.io/"
+      )
+    end
+
+    before do
+      allow(UrlExtractor)
+        .to receive(:call)
+              .with(comment.content)
+              .and_return(urls)
+    end
+
+    it "creates a resource for the comment" do
+      expect { described_class.perform_now(record: comment) }
+        .to change { comment.resources.count }.by(1)
     end
   end
 

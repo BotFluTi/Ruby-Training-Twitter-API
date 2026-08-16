@@ -11,7 +11,7 @@ module Mutations
       tweet = Tweet.new(content: content)
 
       if tweet.save
-        OpenGraphScraperJob.perform_later(tweet_id: tweet.id)
+        OpenGraphScraperJob.perform_later(record: tweet)
 
         {
           tweet: tweet,
