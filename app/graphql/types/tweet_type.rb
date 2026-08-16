@@ -7,5 +7,8 @@ module Types
     field :resources,
           [ Types::ResourceDescriptionType, null: false ],
           null: false
+    field :comments,
+          [ Types::CommentType, null: false ],
+          null: false
   end
 end

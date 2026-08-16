@@ -5,3 +5,11 @@ twelve_ft:
   url: "https://12ft.io/"
   image_url: "https://12ft.io/og-banner.png"
   image_byte_size: 1024
+
+commented_twelve_ft:
+  resourceable: on_with_url (Comment)
+  title: "A resource found in a comment"
+  description: "An Open Graph description from a comment"
+  url: "https://12ft.io/commented"
+  image_url: "https://12ft.io/commented-banner.png"
+  image_byte_size: 2048
