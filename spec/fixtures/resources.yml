@@ -1,5 +1,5 @@
 twelve_ft:
-  tweet: with_url
+  resourceable: with_url (Tweet)
   title: "I don't know what I am doing!"
   description: "An Open Graph description"
   url: "https://12ft.io/"

@@ -29,4 +29,21 @@ RSpec.describe Comment, type: :model do
     expect(comment).not_to be_valid
     expect(comment.errors[:tweet]).to be_present
   end
+
+  it "owns Open Graph resources" do
+    comment = described_class.create!(
+      tweet: tweet,
+      content: "Nice link! https://12ft.io/"
+    )
+
+    resource = comment.resources.create!(
+      title: "I don't know what I am doing!",
+      description: "An Open Graph description",
+      url: "https://12ft.io/",
+      image_url: "https://12ft.io/og-banner.png",
+      image_byte_size: 1024
+    )
+
+    expect(resource.resourceable).to eq(comment)
+  end
 end
